@@ -1,6 +1,7 @@
 package com.englishlearningapp.controller;
 
 import com.englishlearningapp.view.BookReaderView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
@@ -36,6 +37,7 @@ public class BookContentViewController {
     private BookReaderView bookReaderView;
     private List<String> pages;
 
+    @FXML
     public void initialize(BookReaderView bookReaderView, String bookFile) {
         this.bookReaderView = bookReaderView;
 
@@ -90,7 +92,7 @@ public class BookContentViewController {
         }
     }
 
-    private void showPage(int pageIndex) {
+    public void showPage(int pageIndex) {
         if (pageIndex >= 0 && pageIndex < pages.size()) {
             bookContent.setText(pages.get(pageIndex));
         }
@@ -106,5 +108,13 @@ public class BookContentViewController {
 
         // 返回页面容器
         return pageBox;
+    }
+
+
+    public void goBack(ActionEvent actionEvent) {
+    }
+
+
+    public void showPage(ActionEvent actionEvent) {
     }
 }

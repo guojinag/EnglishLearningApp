@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="mainPane"  xmlns:fx="http://javafx.com/fxml" fx:controller="com.englishlearningapp.controller.MainViewController">
+    <center>
+        <!-- 这里将显示阅读、词汇、题目界面 -->
+        <Label text="主界面"/>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
+            <Button text="阅读" onAction="#showBookReaderView" />
+            <Button text="词汇" onAction="#showVocabularySearchView" />
+            <Button text="题目" onAction="#showQuestionView" />
+        </HBox>
+    </bottom>
+</BorderPane>

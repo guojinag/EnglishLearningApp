@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="BookContentViewController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.englishlearningapp.controller.BookContentViewController">
     <center>
         <ScrollPane fx:id="scrollPane">
             <content>
@@ -22,7 +22,7 @@
         <HBox alignment="CENTER" spacing="10">
             <Pagination fx:id="pagination" />
             <TextField fx:id="pageNumberField" promptText="输入页码" />
-            <Button fx:id="goToPageButton" text="跳转" onAction="#goToPage" />
+            <Button fx:id="goToPageButton" text="跳转" onAction="#showPage" />
             <Button fx:id="backButton" text="返回" onAction="#goBack" />
         </HBox>
     </bottom>

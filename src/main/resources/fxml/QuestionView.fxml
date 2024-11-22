@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="subPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="com.englishlearningapp.controller.QuestionViewController">
+    <center>
+        <Label text="题目界面" />
+    </center>
+   <left>
+      <Label text="左侧界面" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Label text="右侧界面" BorderPane.alignment="CENTER" />
+   </right>
+
+</BorderPane>
