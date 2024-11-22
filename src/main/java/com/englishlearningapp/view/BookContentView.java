@@ -124,32 +124,3 @@ public class BookContentView extends BorderPane {
 }
 
 
-//import com.englishlearningapp.controller.BookContentViewController;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.layout.BorderPane;
-//import java.io.IOException;
-//
-//public class BookContentView extends BorderPane {
-//
-//    private BookReaderView bookReaderView;
-//
-//    public BookContentView(BookReaderView bookReaderView, String bookFile) {
-//        this.bookReaderView = bookReaderView;
-//
-//        // 加载 FXML 文件
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BookContentView.fxml"));
-//        try {
-//            loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // 获取控制器并初始化
-//        BookContentViewController controller = loader.getController();
-//        controller.initialize(bookReaderView, bookFile);
-//
-//        // 将加载的 FXML 布局设置为当前布局
-//        this.getChildren().setAll((BorderPane) loader.getRoot());
-//    }
-//}
-
