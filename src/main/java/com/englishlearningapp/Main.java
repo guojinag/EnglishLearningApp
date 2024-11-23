@@ -3,6 +3,7 @@ package com.englishlearningapp;
 import com.englishlearningapp.view.BookReaderView;
 import com.englishlearningapp.view.TestView;
 import com.englishlearningapp.view.VocabularySearchView;
+import com.englishlearningapp.view.VocabularyTestView;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -43,6 +44,7 @@ public class Main extends Application {
         bookReaderButton.setOnAction(event -> showBookReaderView(root));
         vocabularySearchButton.setOnAction(event -> showVocabularySearchView(root));
         testButton.setOnAction(event -> showTestView(root));
+        vocabularyTestButton.setOnAction(event -> showVocabularyTestView(root));
         root.setId("root");
         URL cssurl = getClass().getResource("/css/mainView.css");
         Scene scene = new Scene(root, 800, 600);
@@ -65,6 +67,10 @@ public class Main extends Application {
 
     private void showTestView(BorderPane root) {
         root.setCenter(new TestView());
+    }
+
+    private void showVocabularyTestView(BorderPane root) {
+        root.setCenter(new VocabularyTestView());
     }
 
     public static void main(String[] args) {
