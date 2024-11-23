@@ -96,4 +96,24 @@ public class WordDAO {
         }
         System.out.println("修改收藏成功");
     }
+
+    public List<WordData> selectWordCollect() throws SQLException {
+        List<WordData> list = new ArrayList<>();
+        String sql = "SELECT word, phonetic, explanation, COBUILD_star, collect FROM words WHERE collect = 1;";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String wordResult = rs.getString("word");
+                    String phonetic = rs.getString("phonetic");
+                    String explanation = rs.getString("explanation");
+                    String cobuildStar = rs.getString("COBUILD_star");
+                    int collect = rs.getInt("collect");
+                    list.add(new WordData(wordResult, phonetic, explanation,cobuildStar,collect));
+                }
+            }
+        }
+        return list;
+    }
 }
