@@ -13,6 +13,15 @@ public class WordData {
 
     private String explanation;
 
-    //private String COBUILD_star;
+    private String COBUILD_star;
 
+    private int isCollected;
+
+    public WordData(String wordResult, String phonetic, String explanation, String cobuildStar, int isCollected) {
+        this.word = wordResult;
+        this.phonetic = phonetic;
+        this.explanation = explanation;
+        this.COBUILD_star = cobuildStar;
+        this.isCollected = isCollected;
+    }
 }

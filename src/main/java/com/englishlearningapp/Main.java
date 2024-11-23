@@ -1,8 +1,5 @@
 package com.englishlearningapp;
 
-import com.alibaba.excel.EasyExcel;
-import com.englishlearningapp.model.QuestionData;
-import com.englishlearningapp.util.easyExcelUtil;
 import com.englishlearningapp.view.BookReaderView;
 import com.englishlearningapp.view.TestView;
 import com.englishlearningapp.view.VocabularySearchView;
@@ -11,9 +8,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.net.URL;
 
@@ -54,7 +53,9 @@ public class Main extends Application {
         Scene scene = new Scene(root, 800, 600);
 
         scene.getStylesheets().add(cssurl.toExternalForm());
+        primaryStage.initStyle(StageStyle.UNIFIED);
         primaryStage.setTitle("English Learning App");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/sky.png/")));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -78,8 +79,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //launch(args);
-        String fileName = "D:\\Users\\kevin\\Desktop\\资源统筹\\2024下\\java\\english\\数据\\题目+答案完整版.xlsx";
-        EasyExcel.read(fileName, QuestionData.class, new easyExcelUtil.DemoDataListener()).sheet().doRead();
+        launch(args);
+        //String fileName = "D:\\Users\\kevin\\Desktop\\资源统筹\\2024下\\java\\english\\数据\\题目+答案完整版.xlsx";
+        //EasyExcel.read(fileName, QuestionData.class, new easyExcelUtil.DemoDataListener()).sheet().doRead();
     }
 }
