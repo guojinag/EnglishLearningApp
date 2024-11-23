@@ -3,8 +3,8 @@ package com.englishlearningapp.util;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.util.ListUtils;
-import com.englishlearningapp.dao.WordDAO;
-import com.englishlearningapp.model.WordData;
+import com.englishlearningapp.dao.QuestionDAO;
+import com.englishlearningapp.model.QuestionData;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public class easyExcelUtil {
     // 有个很重要的点 DemoDataListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
     //@Slf4j
-    public static class DemoDataListener implements ReadListener<WordData> {
+    public static class DemoDataListener implements ReadListener<QuestionData> {
 
         /**
          * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
@@ -21,15 +21,15 @@ public class easyExcelUtil {
         /**
          * 缓存的数据
          */
-        private List<WordData> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+        private List<QuestionData> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
         /**
          * 假设这个是一个DAO，当然有业务逻辑这个也可以是一个service。当然如果不用存储这个对象没用。
          */
-        private WordDAO wordDAO;
+        private QuestionDAO demoDAO;
 
         public DemoDataListener() {
             // 这里是demo，所以随便new一个。实际使用如果到了spring,请使用下面的有参构造函数
-            wordDAO = new WordDAO();
+            demoDAO = new QuestionDAO();
         }
 
         /**
@@ -37,9 +37,9 @@ public class easyExcelUtil {
          *
          * @param demoDAO
          */
-        public DemoDataListener(WordDAO demoDAO) {
-            this.wordDAO = demoDAO;
-        }
+//        public DemoDataListener(WordDAO demoDAO) {
+//            this.demoDAO = demoDAO;
+//        }
 
         /**
          * 这个每一条数据解析都会来调用
@@ -48,7 +48,7 @@ public class easyExcelUtil {
          * @param context
          */
         @Override
-        public void invoke(WordData data, AnalysisContext context) {
+        public void invoke(QuestionData data, AnalysisContext context) {
             //log.info("解析到一条数据:{}", JSON.toJSONString(data));
             cachedDataList.add(data);
             // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
@@ -84,7 +84,7 @@ public class easyExcelUtil {
          */
         private void saveData() throws SQLException {
             System.out.println(cachedDataList.size()+"条数据，开始存储数据库！");
-            wordDAO.save(cachedDataList);
+            demoDAO.save(cachedDataList);
             System.out.println("存储数据库成功！");
         }
     }

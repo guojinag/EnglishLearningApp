@@ -1,5 +1,8 @@
 package com.englishlearningapp;
 
+import com.alibaba.excel.EasyExcel;
+import com.englishlearningapp.model.QuestionData;
+import com.englishlearningapp.util.easyExcelUtil;
 import com.englishlearningapp.view.BookReaderView;
 import com.englishlearningapp.view.TestView;
 import com.englishlearningapp.view.VocabularySearchView;
@@ -30,9 +33,10 @@ public class Main extends Application {
         Button bookReaderButton = new Button("书籍阅读");
         Button vocabularySearchButton = new Button("词汇查找");
         Button testButton = new Button("题目测试");
+        Button vocabularyTestButton = new Button("词汇量测试");
 
         // 创建一个HBox布局，并将按钮添加到HBox中
-        HBox buttonBox = new HBox(10, bookReaderButton, vocabularySearchButton, testButton);
+        HBox buttonBox = new HBox(10, bookReaderButton, vocabularySearchButton, testButton, vocabularyTestButton);
         buttonBox.setPrefWidth(Double.MAX_VALUE); // 使HBox的宽度适应窗口大小
 
         // 将HBox添加到BorderPane的底部区域
@@ -74,8 +78,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
-        //String fileName = "D:\\Users\\kevin\\Desktop\\资源统筹\\2024下\\java\\english\\数据\\柯林斯词典词频分级词汇(1-5星).xlsx";
-        //EasyExcel.read(fileName, WordData.class, new easyExcelUtil.DemoDataListener()).sheet(4).doRead();
+        //launch(args);
+        String fileName = "D:\\Users\\kevin\\Desktop\\资源统筹\\2024下\\java\\english\\数据\\题目+答案完整版.xlsx";
+        EasyExcel.read(fileName, QuestionData.class, new easyExcelUtil.DemoDataListener()).sheet().doRead();
     }
 }
