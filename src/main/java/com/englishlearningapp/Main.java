@@ -1,9 +1,6 @@
 package com.englishlearningapp;
 
-import com.englishlearningapp.view.BookReaderView;
-import com.englishlearningapp.view.TestView;
-import com.englishlearningapp.view.VocabularySearchView;
-import com.englishlearningapp.view.VocabularyTestView;
+import com.englishlearningapp.view.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
