@@ -16,7 +16,9 @@ public class QuestionDAO {
             Class.forName("org.sqlite.JDBC");
 
             // 创建数据库连接
+            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
             connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
+
             //statement = connection.createStatement();
 
             System.out.println("成功连接到SQLite数据库！");
