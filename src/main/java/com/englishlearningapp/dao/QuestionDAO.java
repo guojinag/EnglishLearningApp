@@ -103,4 +103,41 @@ public class QuestionDAO {
         }
 
     }
+
+    public List<QuestionData> selectQuestion(List<String> books,boolean needCollect){
+        List<QuestionData> list = new ArrayList<>();
+        String value=String.join(",", books.stream().map(String::valueOf).toArray(String[]::new));
+        String sql = "SELECT * FROM questions WHERE related_book IN (";
+        for (int i = 0; i < books.size(); i++) {
+            sql += "?";
+            if (i < books.size() - 1) {
+                sql += ",";
+            }
+        }
+        sql += ")";
+        if(needCollect){
+            sql=sql+" AND collect=1";
+        }
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            for (int i = 0; i < books.size(); i++) {
+                pstmt.setString(i + 1, books.get(i));
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("question_id");
+                    String type = rs.getString("type");
+                    String module = rs.getString("AI_module");
+                    String question = rs.getString("question");
+                    String answer = rs.getString("answer");
+                    String relatedBook = rs.getString("related_book");
+                    int collect=rs.getInt("collect");
+                    list.add(new QuestionData(id,type,module,relatedBook,question,answer,collect));
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }

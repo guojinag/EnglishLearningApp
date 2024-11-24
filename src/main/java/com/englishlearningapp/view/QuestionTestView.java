@@ -5,66 +5,64 @@ import com.englishlearningapp.model.QuestionData;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
-public class QuestionBankView extends BorderPane {
+public class QuestionTestView extends BorderPane {
 
     private TestView testView;
     private Button returnButton;
+    private List<String> bookList;
+    private int questionNum;
+    private boolean isCollected;
+
     private QuestionDAO questionDAO;
-    private HBox searchBox;
-    private TextField searchField;
-    private Button searchButton;
+    private List<QuestionData> questionDataList;
     private ScrollPane resultPane;
     private VBox resultBox;
     private VBox detailBox;
 
-
-    public QuestionBankView(TestView testView) {
+    public QuestionTestView(TestView testView, Set<String> bookList, int questionNum, boolean isCollected) {
         this.testView = testView;
+        this.questionNum = questionNum;
+        this.isCollected = isCollected;
+        List<String> tmpList = new ArrayList<>();
+        for(String book : bookList) {
+            tmpList.add(book);
+        }
+        this.bookList = tmpList;
         returnButton = new Button("返回");
         returnButton.setOnAction(event -> {
             testView.showTestView();
         });
+        this.setTop(returnButton);
         questionDAO = new QuestionDAO();
 
 
-        searchField = new TextField();
-        searchField.setPromptText("输入题目信息");
-        searchButton=new Button("搜索");
-        searchButton.setOnAction(event -> {
-            try {
-                performSearch();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        searchBox = new HBox(searchField, searchButton,returnButton);
-        this.setTop(searchBox);
+
+        questionDataList = questionDAO.selectQuestion(this.bookList,isCollected);
+
         resultBox=new VBox(new Label("这里是题目浏览界面"));
         resultPane = new ScrollPane(resultBox);
         this.setCenter(resultPane);
-
-        detailBox=new VBox();
-        this.setRight(detailBox);
-
-        try {
-            performSearch();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        this.questionNum=Math.min(questionNum,questionDataList.size());
+        Random rand = new Random();
+        List<Integer> randomNumbers = new ArrayList<>();
+        while (randomNumbers.size() < this.questionNum) {
+            int randomNumber = rand.nextInt(questionDataList.size() + 1);
+            System.out.println(randomNumber);
+            if (!randomNumbers.contains(randomNumber)) {
+                randomNumbers.add(randomNumber);
+            }
         }
-    }
-
-    private void performSearch() throws SQLException{
-        List<QuestionData> list=questionDAO.selectAll();
-        resultBox.getChildren().clear();
-        for(QuestionData q:list){
+        for(Integer i:randomNumbers){
+            QuestionData q=questionDataList.get(i);
             String info;
             if(q.getQuestion().length()>50){
                 info = q.getQuestion().substring(0, 49) + "...";
@@ -78,8 +76,10 @@ public class QuestionBankView extends BorderPane {
             resultBox.getChildren().add(button);
 
         }
-    }
+        detailBox=new VBox();
+        this.setRight(detailBox);
 
+    }
     private void showQuestionDetails(QuestionData q) {
         detailBox = new VBox(10);
         detailBox.getChildren().addAll(
@@ -103,8 +103,8 @@ public class QuestionBankView extends BorderPane {
 
         setRight(detailBox);
     }
-
     private void setCollected(QuestionData question) throws SQLException {
         questionDAO.collectQuestion(question);
     }
+
 }
