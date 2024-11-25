@@ -1,10 +1,13 @@
 package com.englishlearningapp.view;
 
+import com.englishlearningapp.dao.BookDAO;
 import com.englishlearningapp.dao.WordDAO;
 import com.englishlearningapp.model.WordData;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,62 +25,63 @@ import java.util.stream.Collectors;
 public class BookContentView extends BorderPane {
 
     private BookReaderView bookReaderView;
-    private TextArea bookContent;
+    private String bookFile;
+    private WordDAO wordDAO;
+    private BookDAO bookDAO;
+    private List<String> collectedWords;
+    private int index;
+
     private List<String> pages;
     private Pagination pagination;
     private TextField pageNumberField;
-    private WordDAO wordDAO;
-    //private TextFlow textFlow;
     private WebView contentView;
-    private List<String> collectedWords;
+
 
     @SneakyThrows
-    public BookContentView(BookReaderView bookReaderView, String bookFile) throws SQLException {
+    public BookContentView(BookReaderView bookReaderView, String bookFile)  {
         this.bookReaderView = bookReaderView;
-
+        this.bookFile = bookFile.replace(".txt","");
+        //载入收藏单词
         wordDAO = new WordDAO();
         List<WordData> list = wordDAO.selectWordCollect();
         collectedWords = list.stream().map(WordData::getWord).collect(Collectors.toList());
-        // 初始化书籍内容显示区域
+        //载入书签
+        bookDAO = new BookDAO();
+        this.index=bookDAO.selectBookByTitle(this.bookFile);
+
+        //顶部界面：返回菜单
+        Button backButton = new Button("返回");
+        backButton.setOnAction(event -> this.bookReaderView.showBookReaderView());
+        Button preserveIndexButton =new Button("保存书签");
+        preserveIndexButton.setOnAction(event -> {
+            bookDAO.updateBookIndex(this.bookFile,this.index);
+        });
+        HBox topBox = new HBox(backButton, preserveIndexButton);
+        this.setTop(topBox);
+
+
+        // 主界面：书籍内容
         contentView = new WebView();
-
-        //textFlow = new TextFlow(new Text("初始化"));
-
         // 加载并分页书籍内容
         loadBookContent(bookFile);
-
-        // 创建返回按钮
-        Button backButton = new Button("返回");
-        backButton.setOnAction(event -> bookReaderView.showBookReaderView());
-
-        // 创建分页控件
         pagination = new Pagination(pages.size());
         pagination.setPageFactory(this::createPage);
-
-        // 创建快速跳转页码的输入框和按钮
+        pagination.setCurrentPageIndex(index-1);
         pageNumberField = new TextField();
         pageNumberField.setPromptText("输入页码");
         Button goToPageButton = getGoToPageButton();
-
-        // 将书籍内容和分页控件添加到布局中
         ScrollPane scrollPane = new ScrollPane(contentView);
-        scrollPane.setFitToWidth(true); // 使内容适应宽度
-        scrollPane.setFitToHeight(true); // 使内容适应高度
-
-        // 设置书籍内容区域的大小
-        scrollPane.setPrefWidth(Double.MAX_VALUE);
-        scrollPane.setPrefHeight(Double.MAX_VALUE);
-
-        // 修改布局，将书籍内容扩大到几乎整个窗口，只在下侧保留返回按钮、分页控件和快速跳转页码的输入框和按钮
-        HBox bottomBox = new HBox(10, pagination, pageNumberField, goToPageButton, backButton);
-        bottomBox.setAlignment(Pos.CENTER);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         this.setCenter(scrollPane);
-        this.setBottom(bottomBox);
-        BorderPane.setAlignment(backButton, Pos.CENTER);
-        BorderPane.setMargin(backButton, new Insets(10));
 
-        // 显示第一页内容
-        showPage(0);
+        // 底部界面：分页控制
+        HBox bottomBox = new HBox(10, pagination, pageNumberField, goToPageButton);
+        bottomBox.setAlignment(Pos.CENTER);
+        this.setBottom(bottomBox);
+
+
+        //showPage(this.index);
     }
 
     private Button getGoToPageButton() {
@@ -90,33 +93,29 @@ public class BookContentView extends BorderPane {
                     pagination.setCurrentPageIndex(targetPage);
                     showPage(targetPage);
                 } else {
-                    bookContent.setText("页码超出范围");
+                    contentView.getEngine().loadContent("页码超出范围");
                 }
             } catch (NumberFormatException e) {
-                bookContent.setText("请输入有效的页码");
+                contentView.getEngine().loadContent("请输入有效页码");
             }
         });
         return goToPageButton;
     }
 
     private void loadBookContent(String bookFile) {
-        // 加载并分页书籍内容
         InputStream inputStream = getClass().getResourceAsStream("/books/"+bookFile);
         if (inputStream == null) {
-            //textFlow=new TextFlow(new Text("无法加载书籍内容"));
-            bookContent.setText("无法加载书籍内容");
+            contentView.getEngine().loadContent("无法加载书籍内容");
             return;
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         String content = reader.lines().collect(Collectors.joining("\n"));
 
-        // 将内容分页
         pages = new ArrayList<>();
         int pageSize = 1000; // 每页字符数
         int start = 0;
         while (start < content.length()) {
             int end = Math.min(start + pageSize, content.length());
-            // 如果当前页的最后一个字符不是空格，向后查找单词边界
             if (end < content.length() && content.charAt(end) != ' ') {
                 int wordEnd = content.indexOf(' ', end);
                 if (wordEnd != -1) {
@@ -126,45 +125,76 @@ public class BookContentView extends BorderPane {
             pages.add(content.substring(start, end));
             start = end;
         }
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+//        String content = reader.lines().collect(Collectors.joining("\n"));
+//        pages = new ArrayList<>();
+//        int pageSize = 1000; // 每页字符数
+//        int start = 0;
+//        while (start < content.length()) {
+//            int end = Math.min(start + pageSize, content.length());
+//            // 查找最近的段落边界
+//            if (end < content.length() && content.charAt(end) != '\n') {
+//                int paragraphEnd = content.indexOf('\n', end);
+//                if (paragraphEnd != -1) {
+//                    end = paragraphEnd;
+//                }
+//            }
+//            // 如果段落边界在当前页内，则使用段落边界
+//            if (end < content.length() && content.charAt(end) == '\n') {
+//                end++; // 包含换行符
+//            } else {
+//                // 否则，查找最近的单词边界
+//                if (end < content.length() && content.charAt(end) != ' ') {
+//                    int wordEnd = content.indexOf(' ', end);
+//                    if (wordEnd != -1) {
+//                        end = wordEnd;
+//                    }
+//                }
+//            }
+//            pages.add(content.substring(start, end));
+//            start = end;
+//        }
+
     }
 
     private void showPage(int pageIndex){
         if (pageIndex >= 0 && pageIndex < pages.size()) {
-
-            String highlightedPage = hilightWoirds(pages.get(pageIndex), collectedWords);
-            //bookContent.setText(highlightedPage);
+            this.index=pageIndex;
+            String highlightedPage = highlightWords(pages.get(pageIndex), collectedWords);
             contentView.getEngine().loadContent(highlightedPage);
         }
     }
 
     private VBox createPage(int pageIndex){
-        // 创建一个VBox来容纳页面内容
         VBox pageBox = new VBox(10);
         pageBox.setAlignment(Pos.CENTER);
-
-        // 显示页面内容
         showPage(pageIndex);
-
-        // 返回页面容器
         return pageBox;
     }
 
-    private String hilightWoirds(String content, List<String> wordsToHighlight) {
+    private String highlightWords(String content, List<String> wordsToHighlight) {
         StringBuilder textBuilder = new StringBuilder();
-        String[] words = content.split("\\s+");
+        String[] paragraphs = content.split("\\R"); // 使用正则表达式分割段落
 
-        for (String word : words) {
-            if (wordsToHighlight.contains(word)) {
-                textBuilder.append("<span style='color:red; text-decoration:underline;'>")
-                        .append(word)
-                        .append("</span> ");
-            } else {
-                textBuilder.append(word).append(" ");
+        for (String paragraph : paragraphs) {
+            String[] words = paragraph.split("\\s+"); // 分割段落中的单词
+
+            for (String word : words) {
+                if (wordsToHighlight.contains(word)) {
+                    textBuilder.append("<span style='color: green;text-decoration:underline;'>")
+                            .append(word)
+                            .append("</span> ");
+                } else {
+                    textBuilder.append(word).append(" ");
+                }
             }
+
+            textBuilder.append("<br>"); // 在每个段落之间添加换行符
         }
 
-        return textBuilder.toString();
+        return textBuilder.toString().trim(); // 去除最后的换行符
     }
+
 }
 
 

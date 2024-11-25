@@ -1,53 +1,101 @@
 #root {
-    -fx-background-color: #a4f5c5;
+    /*-fx-background-color: #3b5456;*/
 }
 
 /* 美化按钮 */
 .button {
-    -fx-background-color: #4CAF50; /* 绿色背景 */
-    -fx-text-fill: white; /* 白色文字 */
+    -fx-background-color: rgba(255, 255, 255, 0.3); /* 无色半透明背景 */
+    -fx-text-fill: #625443; /* 文字颜色 */
     -fx-font-size: 14px; /* 字体大小 */
     -fx-padding: 5px 10px; /* 内边距 */
     -fx-border-radius: 5px; /* 圆角 */
-    -fx-background-radius: 5px; /* 背景圆角 */
+    -fx-background-radius: 5px; /* 圆角 */
 }
-
 /* 按钮悬停效果 */
 .button:hover {
-    -fx-background-color: #45a049; /* 深绿色背景 */
+    -fx-background-color: rgba(255, 255, 255, 0.5); /* 半透明背景，稍微加深 */
 }
 
 /* 按钮按下效果 */
 .button:pressed {
-    -fx-background-color: #3e8e41; /* 更深的绿色背景 */
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* 半透明背景，更深 */
 }
 
-/* 美化文本框 */
+
+/* 美化输入文本框 */
 .text-field {
-    -fx-background-color: #ffffff; /* 白色背景 */
-    -fx-border-color: #cccccc; /* 灰色边框 */
+    -fx-background-color: rgba(255, 255, 255, 0.5); /* 背景颜色 */
+    -fx-border-color: #cccccc; /* 边框 */
     -fx-border-radius: 5px; /* 圆角 */
     -fx-background-radius: 5px; /* 背景圆角 */
     -fx-padding: 5px; /* 内边距 */
     -fx-font-size: 14px; /* 字体大小 */
 }
-
-/* 文本框获得焦点时的效果 */
-.text-field:focused {
-    -fx-border-color: #4CAF50; /* 绿色边框 */
-}
-
 /* 美化文本区域 */
 .text-area {
-    -fx-background-color: #ffffff; /* 白色背景 */
+    -fx-background-color: #ec156f; /* 白色背景 */
     -fx-border-color: #cccccc; /* 灰色边框 */
     -fx-border-radius: 5px; /* 圆角 */
     -fx-background-radius: 5px; /* 背景圆角 */
     -fx-padding: 5px; /* 内边距 */
     -fx-font-size: 14px; /* 字体大小 */
 }
-
 /* 文本区域获得焦点时的效果 */
 .text-area:focused {
-    -fx-border-color: #4CAF50; /* 绿色边框 */
+    -fx-border-color: #2010f5; /* 绿色边框 */
 }
+/* 设置 ScrollPane 的背景颜色 */
+.scroll-pane {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+/* 设置 ScrollPane 的内容区域背景颜色 */
+.scroll-pane > .viewport {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+/* 设置垂直滚动条的样式 */
+.scroll-pane > .scroll-bar:vertical {
+    -fx-background-color: #d0d0d0;
+    -fx-pref-width: 12px;
+}
+/* 设置垂直滚动条的滑块样式 */
+.scroll-pane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #808080;
+    -fx-background-radius: 6px;
+}
+/* 设置水平滚动条的样式 */
+.scroll-pane > .scroll-bar:horizontal {
+    -fx-background-color: #d0d0d0;
+    -fx-pref-height: 12px;
+}
+/* 设置水平滚动条的滑块样式 */
+.scroll-pane > .scroll-bar:horizontal > .thumb {
+    -fx-background-color: #808080;
+    -fx-background-radius: 6px;
+}
+/* 设置滚动条的箭头按钮不可见 */
+.scroll-pane > .scroll-bar > .increment-button,
+.scroll-pane > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}
+
+/* 设置滚动条的滚动速度 */
+.scroll-pane > .scroll-bar:vertical > .increment-arrow,
+.scroll-pane > .scroll-bar:vertical > .decrement-arrow,
+.scroll-pane > .scroll-bar:horizontal > .increment-arrow,
+.scroll-pane > .scroll-bar:horizontal > .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+#sentence {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-padding: 10px;
+    -fx-border-color: rgba(255, 255, 255, 0);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+}
+

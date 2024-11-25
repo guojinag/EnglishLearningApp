@@ -21,9 +21,7 @@ public class WordDAO {
             //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
             connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
 
-            //statement = connection.createStatement();
-
-            System.out.println("成功连接到SQLite数据库！");
+            System.out.println("成功连接到word数据库！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -83,6 +81,8 @@ public class WordDAO {
                     list.add(new WordData(wordResult, phonetic, explanation,cobuildStar,collect));
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return list;
     }
@@ -105,7 +105,6 @@ public class WordDAO {
         String sql = "SELECT word, phonetic, explanation, COBUILD_star, collect FROM words WHERE collect = 1;";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     String wordResult = rs.getString("word");
@@ -116,6 +115,8 @@ public class WordDAO {
                     list.add(new WordData(wordResult, phonetic, explanation,cobuildStar,collect));
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
 
         return list;

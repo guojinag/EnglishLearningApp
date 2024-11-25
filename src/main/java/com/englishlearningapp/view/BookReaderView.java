@@ -3,72 +3,72 @@ package com.englishlearningapp.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookReaderView extends BorderPane {
 
+
+    private ScrollPane mainScrollPane;
     private GridPane bookGrid;
 
     public BookReaderView() {
         // 初始化书籍网格
         bookGrid = new GridPane();
         bookGrid.setPadding(new Insets(10));
-        bookGrid.setHgap(10); // 设置水平间距
-        bookGrid.setVgap(10); // 设置垂直间距
+        bookGrid.setHgap(10);
+        bookGrid.setVgap(10);
 
-        // 读取books目录下的所有txt文件
+        for (int i = 0; i < 3; i++) {
+            ColumnConstraints columnConstraints = new ColumnConstraints();
+            columnConstraints.setPercentWidth(100.0 / 3);
+            bookGrid.getColumnConstraints().add(columnConstraints);
+        }
+        // 读取book,创建网格内容
         List<String> bookFiles = getBookFiles();
-
-        // 为每个txt文件创建一个按钮和图片
         int row = 0;
         int col = 0;
         for (String bookFile : bookFiles) {
             String fileName = getFileName(bookFile);
-            String imageFileName = fileName.replace(".txt", ".png"); // 假设图片格式为png
+            String imageFileName = fileName.replace(".txt", ".png");
 
-            // 创建图片视图
-            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + imageFileName)));
-            imageView.setFitWidth(62); // 设置图片宽度
-            imageView.setFitHeight(100); // 设置图片高度
+            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/book/" + imageFileName)));
+            imageView.setFitWidth(62);
+            imageView.setFitHeight(100);
 
-            // 创建按钮
-            Button bookButton = new Button(fileName);
+            Button bookButton = new Button(fileName.replace(".txt", ""));
             bookButton.setOnAction(event -> {
-                try {
-                    showBookContentView(bookFile);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                showBookContentView(bookFile);
             });
 
-            // 创建VBox来容纳图片和按钮
             VBox bookItem = new VBox(10, imageView, bookButton);
-            bookItem.setAlignment(Pos.CENTER); // 设置对齐方式
-
-            // 将VBox添加到网格中
+            bookItem.setAlignment(Pos.CENTER);
             bookGrid.add(bookItem, col, row);
 
-            // 更新行列索引
             col++;
-            if (col >= 4) {
+            if (col >= 3) {
                 col = 0;
                 row++;
             }
         }
 
-        // 将书籍网格添加到布局中
+        mainScrollPane = new ScrollPane(bookGrid);
+        mainScrollPane.setFitToWidth(true);
+
+
         this.setCenter(bookGrid);
     }
 
@@ -94,14 +94,12 @@ public class BookReaderView extends BorderPane {
         return filePath;
     }
 
-    private void showBookContentView(String bookFile) throws SQLException {
-        // 创建并显示书籍内容界面
+    private void showBookContentView(String bookFile) {
         BookContentView bookContentView = new BookContentView(this, bookFile);
         this.setCenter(bookContentView);
     }
 
     public void showBookReaderView() {
-        // 重新显示书籍阅读界面
         this.setCenter(bookGrid);
     }
 }
