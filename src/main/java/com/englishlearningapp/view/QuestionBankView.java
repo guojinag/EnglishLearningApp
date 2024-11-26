@@ -41,11 +41,11 @@ public class QuestionBankView extends BorderPane {
 
         searchField = new TextField();
         searchField.setPromptText("输入题目信息");
-        searchButton=new Button("搜索");
+        searchButton=new Button("刷新");
         searchButton.setOnAction(event -> {
             performSearch();
         });
-        searchBox = new HBox(returnButton,searchField, searchButton);
+        searchBox = new HBox(returnButton,searchButton);
         searchBox.setSpacing(10);
         this.setTop(searchBox);
         resultBox=new VBox(new Label("这里是题目浏览界面"));
@@ -54,7 +54,7 @@ public class QuestionBankView extends BorderPane {
         detailBox=new VBox();
         rightPane=new BorderPane(detailBox);
         splitPane=new SplitPane(rightPane,resultPane);
-        splitPane.setDividerPositions(0.6);
+        splitPane.setDividerPositions(0.8);
         this.setCenter(splitPane);
 
 
@@ -110,6 +110,7 @@ public class QuestionBankView extends BorderPane {
             collectButton.setText(q.getIsCollected()==1?"收藏":"取消收藏");
             try {
                 setCollected(q);
+                performSearch();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
