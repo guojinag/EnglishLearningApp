@@ -9,14 +9,27 @@ public class BookDAO {
             // 加载SQLite驱动程序
             Class.forName("org.sqlite.JDBC");
             // 创建数据库连接
-            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
-            connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
+            String DBPath= String.valueOf(getClass().getResource("/SmartReadAI.db"));
+            DBPath=DBPath.substring(5,DBPath.length());
+            //System.out.println("jdbc:sqlite:"+DBPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
+            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
             System.out.println("成功连接到book数据库！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("关闭数据库连接");
     }
     public int selectBookByTitle(String title) {
         String sql = "select * from books where book = ? ";

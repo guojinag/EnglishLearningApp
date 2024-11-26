@@ -2,9 +2,11 @@ package com.englishlearningapp.view;
 
 import com.englishlearningapp.dao.QuestionDAO;
 import com.englishlearningapp.model.QuestionData;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -27,6 +29,8 @@ public class QuestionTestView extends BorderPane {
     private ScrollPane resultPane;
     private VBox resultBox;
     private VBox detailBox;
+    private SplitPane splitPane;
+    private BorderPane rightPane;
 
     public QuestionTestView(TestView testView, Set<String> bookList, int questionNum, boolean isCollected) {
         this.testView = testView;
@@ -45,12 +49,10 @@ public class QuestionTestView extends BorderPane {
         questionDAO = new QuestionDAO();
 
 
-
         questionDataList = questionDAO.selectQuestion(this.bookList,isCollected);
 
-        resultBox=new VBox(new Label("这里是题目浏览界面"));
+        resultBox=new VBox(new Label("题目"));
         resultPane = new ScrollPane(resultBox);
-        this.setCenter(resultPane);
         this.questionNum=Math.min(questionNum,questionDataList.size());
         Random rand = new Random();
         List<Integer> randomNumbers = new ArrayList<>();
@@ -63,21 +65,20 @@ public class QuestionTestView extends BorderPane {
         }
         for(Integer i:randomNumbers){
             QuestionData q=questionDataList.get(i);
-            String info;
-            if(q.getQuestion().length()>50){
-                info = q.getQuestion().substring(0, 49) + "...";
-            }else{
-                info = q.getQuestion();
-            }
-            Button button=new Button(info);
+            Button button=new Button(i+"");
             button.setOnAction(event -> {
                 showQuestionDetails(q);
             });
             resultBox.getChildren().add(button);
-
         }
+        resultBox.setSpacing(10);
+        resultBox.setPadding(new Insets(10,10,10,10));
+
         detailBox=new VBox();
-        this.setRight(detailBox);
+        rightPane=new BorderPane(detailBox);
+        splitPane=new SplitPane(rightPane,resultPane);
+        splitPane.setDividerPositions(0.9);
+        this.setCenter(splitPane);
 
     }
     private void showQuestionDetails(QuestionData q) {
@@ -101,7 +102,7 @@ public class QuestionTestView extends BorderPane {
         });
         detailBox.getChildren().add(collectButton);
 
-        setRight(detailBox);
+        rightPane.setCenter(detailBox);
     }
     private void setCollected(QuestionData question) throws SQLException {
         questionDAO.collectQuestion(question);

@@ -42,7 +42,7 @@ public class Main extends Application {
         pa=pa.substring(5,pa.length());
         String sentence=getRandomLine(pa);
         Label mainlabel = new Label(sentence);
-        mainlabel.setId("sentence");
+        mainlabel.setId("sentence"); 
         root.setCenter(mainlabel);
         mainlabel.setAlignment(Pos.CENTER);
         Random rand = new Random();

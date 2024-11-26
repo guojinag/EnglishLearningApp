@@ -3,6 +3,8 @@ package com.englishlearningapp.view;
 import com.englishlearningapp.dao.QuestionDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -38,13 +40,15 @@ public class QuestionSelectView extends BorderPane {
         this.testView = testView;
         questionDAO = new QuestionDAO();
         bookList=questionDAO.getBooks();
+
+        //顶部菜单
         returnButton = new Button("返回");
         returnButton.setOnAction(event -> {
             testView.showTestView();
         });
         this.setTop(returnButton);
 
-
+        //中部菜单：题目范围选择
         questionNumField = new TextField();
         questionNumField.setPromptText("输入题目数量");
         needCollect = new CheckBox("在收藏题目中选择");
@@ -56,9 +60,11 @@ public class QuestionSelectView extends BorderPane {
             }
         });
         selectBox = new HBox(questionNumField, needCollect);
+        selectBox.setAlignment(Pos.CENTER);
 
 
         vBox = new VBox(new Label("选择你的题库"));
+        vBox.setId("questionSelect");
         for(String book:bookList){
             CheckBox checkBox = new CheckBox(book);
             checkBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -71,7 +77,7 @@ public class QuestionSelectView extends BorderPane {
             vBox.getChildren().add(checkBox);
         }
         vBox.getChildren().add(selectBox);
-        this.setLeft(vBox);
+
         selectButton=new Button("确认选择");
         selectButton.setOnAction(event -> {
             if(isInteger(questionNumField.getText())){
@@ -86,7 +92,13 @@ public class QuestionSelectView extends BorderPane {
             stage.setScene(scene);
             stage.show();
         });
-        this.setBottom(selectButton);
+        vBox.getChildren().add(selectButton);
+        this.setCenter(vBox);
+        vBox.setSpacing(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(10,10,10,10));
+
+        //this.setBottom(selectButton);
     }
 
     private boolean isInteger(String input) {

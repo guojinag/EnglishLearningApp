@@ -70,7 +70,7 @@ public class VocabularyTestView extends BorderPane {
     }
 
     private void showVocabulary(){
-        List<VocabularyData> list=vocabularyDAO.selectAll();
+        List<VocabularyData> list=vocabularyDAO.selectAll(10);
 
         historyBox.getChildren().clear();
         for(VocabularyData vocabularyData:list){

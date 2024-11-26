@@ -4,8 +4,8 @@
 
 /* 美化按钮 */
 .button {
-    -fx-background-color: rgba(255, 255, 255, 0.3); /* 无色半透明背景 */
-    -fx-text-fill: #625443; /* 文字颜色 */
+    -fx-background-color: rgba(255, 255, 255, 0.6); /* 无色半透明背景 */
+    -fx-text-fill: #605441; /* 文字颜色 */
     -fx-font-size: 14px; /* 字体大小 */
     -fx-padding: 5px 10px; /* 内边距 */
     -fx-border-radius: 5px; /* 圆角 */
@@ -21,11 +21,10 @@
     -fx-background-color: rgba(255, 255, 255, 0.7); /* 半透明背景，更深 */
 }
 
-
 /* 美化输入文本框 */
 .text-field {
-    -fx-background-color: rgba(255, 255, 255, 0.5); /* 背景颜色 */
-    -fx-border-color: #cccccc; /* 边框 */
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* 背景颜色 */
+    -fx-border-color: rgba(255, 255, 255, 0); /* 边框 */
     -fx-border-radius: 5px; /* 圆角 */
     -fx-background-radius: 5px; /* 背景圆角 */
     -fx-padding: 5px; /* 内边距 */
@@ -86,6 +85,50 @@
     -fx-background-color: transparent;
 }
 
+/* 设置 SplitPane 的背景颜色 */
+.split-pane {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 设置 SplitPane 的分隔条样式 */
+.split-pane *.split-pane-divider {
+    -fx-padding: 1px; /* 分隔条的宽度 */
+    -fx-background-color: rgba(255,255,255,0); /* 分隔条的背景颜色 */
+    -fx-border-color: rgba(255,255,255,0); /* 分隔条的边框颜色 */
+    -fx-border-width: 1px; /* 分隔条的边框宽度 */
+}
+
+/*!* 设置 SplitPane 的分隔条在鼠标悬停时的样式 *!*/
+/*.split-pane *.split-pane-divider:hover {*/
+/*    -fx-background-color: #aaaaaa; !* 分隔条在鼠标悬停时的背景颜色 *!*/
+/*    -fx-border-color: #666666; !* 分隔条在鼠标悬停时的边框颜色 *!*/
+/*}*/
+/*!* 设置 SplitPane 的分隔条在拖动时的样式 *!*/
+/*.split-pane *.split-pane-divider:pressed {*/
+/*    -fx-background-color: #888888; !* 分隔条在拖动时的背景颜色 *!*/
+/*    -fx-border-color: #444444; !* 分隔条在拖动时的边框颜色 *!*/
+/*}*/
+
+/* 设置 SplitPane 的子节点（左侧和右侧界面）的样式 */
+.split-pane > .split-pane-divider {
+    -fx-padding: 5px; /* 分隔条的宽度 */
+    -fx-background-color: rgba(255,255,255,0); /* 分隔条的背景颜色 */
+    -fx-border-color: rgba(255,255,255,0); /* 分隔条的边框颜色 */
+    -fx-border-width: 0px; /* 分隔条的边框宽度 */
+}
+
+/* 设置 SplitPane 的子节点在鼠标悬停时的样式 */
+/*.split-pane > .split-pane-divider:hover {*/
+/*    -fx-background-color: #bbbbbb; !* 分隔条在鼠标悬停时的背景颜色 *!*/
+/*    -fx-border-color: #999999; !* 分隔条在鼠标悬停时的边框颜色 *!*/
+/*}*/
+/*!* 设置 SplitPane 的子节点在拖动时的样式 *!*/
+/*.split-pane > .split-pane-divider:pressed {*/
+/*    -fx-background-color: #999999; !* 分隔条在拖动时的背景颜色 *!*/
+/*    -fx-border-color: #777777; !* 分隔条在拖动时的边框颜色 *!*/
+/*}*/
+
+
 #sentence {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -97,5 +140,9 @@
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+}
+
+#questionSelect{
+    -fx-background-color: rgba(255, 255, 255, 0.3);
 }
 

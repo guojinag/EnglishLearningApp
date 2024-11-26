@@ -13,9 +13,13 @@ public class QuestionDAO {
             // 加载SQLite驱动程序
             Class.forName("org.sqlite.JDBC");
             // 创建数据库连接
+            String DBPath= String.valueOf(getClass().getResource("/SmartReadAI.db"));
+            DBPath=DBPath.substring(5,DBPath.length());
+            //System.out.println("jdbc:sqlite:"+DBPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
             //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
-            connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
-            System.out.println("成功连接到SQLite数据库的question表！");
+            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
+            System.out.println("成功连接到question表！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
