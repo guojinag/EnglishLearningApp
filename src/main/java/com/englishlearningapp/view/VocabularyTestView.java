@@ -14,11 +14,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class VocabularyTestView extends BorderPane {
@@ -36,9 +37,7 @@ public class VocabularyTestView extends BorderPane {
         addField.setPromptText("你的词汇量是");
         addButton = new Button("记录");
         addButton.setOnAction(event -> addVocabulary());
-        addBox = new HBox(addField, addButton);
-        this.setTop(addBox);
-        addBox.setAlignment(Pos.CENTER);
+
 
         Button button = new Button("点击开始词汇测试");
         button.setOnAction(e -> {
@@ -48,9 +47,11 @@ public class VocabularyTestView extends BorderPane {
                 ex.printStackTrace();
             }
         });
-        this.setRight(button);
         button.setAlignment(Pos.CENTER);
-
+        addBox = new HBox(button,addField, addButton);
+        this.setTop(addBox);
+        addBox.setAlignment(Pos.CENTER);
+        addBox.setSpacing(10);
 
         historyBox = new VBox();
         historyBox.setSpacing(5);
@@ -58,6 +59,7 @@ public class VocabularyTestView extends BorderPane {
         showVocabulary();
         historyScrollPane = new ScrollPane();
         historyScrollPane.setContent(historyBox);
+        historyBox.setAlignment(Pos.CENTER);
         this.setCenter(historyScrollPane);
     }
 
@@ -74,9 +76,15 @@ public class VocabularyTestView extends BorderPane {
 
         historyBox.getChildren().clear();
         for(VocabularyData vocabularyData:list){
-            Label label=new Label(vocabularyData.getDate());
+            Label date=new Label(vocabularyData.getDate());
+            date.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
             Label vocabularyNum=new Label(vocabularyData.getVocabulary()+"");
-            HBox hBox=new HBox(vocabularyNum,label);
+            vocabularyNum.setStyle("-fx-font-size: 32px; -fx-font-weight: bold;");
+            date.setAlignment(Pos.CENTER);
+            vocabularyNum.setAlignment(Pos.CENTER);
+            HBox hBox=new HBox(vocabularyNum,date);
+            hBox.setAlignment(Pos.CENTER);
+            hBox.setSpacing(10);
             historyBox.getChildren().add(hBox);
         }
     }
@@ -85,7 +93,8 @@ public class VocabularyTestView extends BorderPane {
             int vocabulary=Integer.parseInt(addField.getText());
             if(vocabulary>=0){
                 LocalDateTime now=LocalDateTime.now();
-                VocabularyData vocabularyData=new VocabularyData(vocabulary,now.toString());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                VocabularyData vocabularyData=new VocabularyData(vocabulary,now.format(formatter));
                 vocabularyDAO.save(vocabularyData);
                 showVocabulary();
                 return;

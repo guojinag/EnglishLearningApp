@@ -25,7 +25,7 @@ public class WordDAO {
             //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
             //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
 
-            System.out.println("成功连接到word数据库！");
+            //System.out.println("成功连接到word数据库！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

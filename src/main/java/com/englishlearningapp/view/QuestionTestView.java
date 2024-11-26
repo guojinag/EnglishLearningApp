@@ -3,12 +3,17 @@ package com.englishlearningapp.view;
 import com.englishlearningapp.dao.QuestionDAO;
 import com.englishlearningapp.model.QuestionData;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,19 +62,21 @@ public class QuestionTestView extends BorderPane {
         Random rand = new Random();
         List<Integer> randomNumbers = new ArrayList<>();
         while (randomNumbers.size() < this.questionNum) {
-            int randomNumber = rand.nextInt(questionDataList.size() + 1);
-            System.out.println(randomNumber);
+            int randomNumber = rand.nextInt(questionDataList.size() );
+            //System.out.println(randomNumber);
             if (!randomNumbers.contains(randomNumber)) {
                 randomNumbers.add(randomNumber);
             }
         }
+        int num=1;
         for(Integer i:randomNumbers){
             QuestionData q=questionDataList.get(i);
-            Button button=new Button(i+"");
+            Button button=new Button(num+"");
             button.setOnAction(event -> {
                 showQuestionDetails(q);
             });
             resultBox.getChildren().add(button);
+            num++;
         }
         resultBox.setSpacing(10);
         resultBox.setPadding(new Insets(10,10,10,10));
@@ -82,14 +89,28 @@ public class QuestionTestView extends BorderPane {
 
     }
     private void showQuestionDetails(QuestionData q) {
-        detailBox = new VBox(10);
-        detailBox.getChildren().addAll(
-                new Label(q.getType()),
-                new Label(q.getAnswer()),
-                new Label(q.getQuestion()),
-                new Label(q.getAiModule()),
-                new Label(q.getRelatedBook())
-        );
+
+        Label typeLabel = new Label("题目类型："+q.getType());
+        Label aiModuleLabel = new Label("ai模型："+q.getAiModule());
+        Label relatedBookLabel = new Label("关联书籍："+q.getRelatedBook());
+        HBox typeBox=new HBox(typeLabel,aiModuleLabel,relatedBookLabel);
+        typeBox.setSpacing(30);
+        typeBox.setPadding(new Insets(10,10,10,10));
+
+
+        TextFlow answerLabel = new TextFlow(new Text("答案："+q.getAnswer()));
+
+        answerLabel.setVisible(false);
+        Button answerButton=new Button("显示答案");
+        answerButton.setOnAction(event -> {
+            answerLabel.setVisible(true);
+            answerButton.setVisible(false);
+        });
+        answerButton.setAlignment(Pos.CENTER_LEFT);
+        StackPane stackPane=new StackPane(answerLabel,answerButton);
+        TextFlow questionLabel = new TextFlow(new Text(q.getQuestion()));
+        detailBox = new VBox(typeBox,questionLabel,stackPane);
+
         Button collectButton=new Button(q.getIsCollected()==0?"收藏":"取消收藏");
         collectButton.setOnAction(event -> {
             collectButton.setText(q.getIsCollected()==1?"收藏":"取消收藏");
@@ -101,6 +122,9 @@ public class QuestionTestView extends BorderPane {
             q.setIsCollected(q.getIsCollected()==1?0:1);
         });
         detailBox.getChildren().add(collectButton);
+
+        detailBox.setSpacing(10);
+        detailBox.setPadding(new Insets(10,10,10,10));
 
         rightPane.setCenter(detailBox);
     }

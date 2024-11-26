@@ -4,7 +4,7 @@
 
 /* 美化按钮 */
 .button {
-    -fx-background-color: rgba(255, 255, 255, 0.6); /* 无色半透明背景 */
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* 无色半透明背景 */
     -fx-text-fill: #605441; /* 文字颜色 */
     -fx-font-size: 14px; /* 字体大小 */
     -fx-padding: 5px 10px; /* 内边距 */
@@ -18,7 +18,7 @@
 
 /* 按钮按下效果 */
 .button:pressed {
-    -fx-background-color: rgba(255, 255, 255, 0.7); /* 半透明背景，更深 */
+    -fx-background-color: rgba(255, 255, 255, 0.3); /* 半透明背景，更深 */
 }
 
 /* 美化输入文本框 */
@@ -87,7 +87,7 @@
 
 /* 设置 SplitPane 的背景颜色 */
 .split-pane {
-    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* 设置 SplitPane 的分隔条样式 */

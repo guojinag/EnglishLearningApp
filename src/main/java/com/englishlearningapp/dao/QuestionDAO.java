@@ -19,7 +19,7 @@ public class QuestionDAO {
             connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
             //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
             //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
-            System.out.println("成功连接到question表！");
+            //System.out.println("成功连接到question表！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class QuestionDAO {
                     String answer = rs.getString("answer");
                     String relatedBook = rs.getString("related_book");
                     int collect=rs.getInt("collect");
-                    list.add(new QuestionData(id,type,module,relatedBook,question,answer,collect));
+                    list.add(new QuestionData(id,type,relatedBook,module,question,answer,collect));
                 }
             }
         }catch (SQLException e){
@@ -135,7 +135,7 @@ public class QuestionDAO {
                     String answer = rs.getString("answer");
                     String relatedBook = rs.getString("related_book");
                     int collect=rs.getInt("collect");
-                    list.add(new QuestionData(id,type,module,relatedBook,question,answer,collect));
+                    list.add(new QuestionData(id,type,relatedBook,module,question,answer,collect));
                 }
             }
         }catch (SQLException e){

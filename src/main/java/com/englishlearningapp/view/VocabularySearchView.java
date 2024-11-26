@@ -99,12 +99,12 @@ public class VocabularySearchView extends BorderPane {
 
         // 创建单词拼写标签，并设置字体大小和加粗
         Label wordLabel = new Label(word.getWord());
-        wordLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        wordLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold;");
 
         // 创建单词音标、释义和星级标签
         Label phoneticLabel = new Label(word.getPhonetic());
-        Label explanationLabel = new Label(word.getExplanation());
-        Label starLabel = new Label(word.getCOBUILD_star());
+        Label explanationLabel = new Label("\n"+word.getExplanation());
+        Label starLabel = new Label("柯林斯星级："+word.getCOBUILD_star());
 
         Button collectButton = new Button(word.getIsCollected() == 0 ? "收藏" : "取消收藏");
         collectButton.setOnAction(event -> {

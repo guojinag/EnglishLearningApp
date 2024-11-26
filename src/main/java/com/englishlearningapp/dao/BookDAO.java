@@ -14,7 +14,7 @@ public class BookDAO {
             //System.out.println("jdbc:sqlite:"+DBPath);
             connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
             //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
-            System.out.println("成功连接到book数据库！");
+            //System.out.println("成功连接到book数据库！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -51,7 +51,7 @@ public class BookDAO {
             ps.setInt(1, bookIndex);
             ps.setString(2, title);
             ps.executeUpdate();
-            System.out.println(title+bookIndex);
+            //System.out.println(title+bookIndex);
         }catch (SQLException e){
             e.printStackTrace();
         }

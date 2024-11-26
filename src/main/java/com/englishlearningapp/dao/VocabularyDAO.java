@@ -26,7 +26,7 @@ public class VocabularyDAO {
 
             //statement = connection.createStatement();
 
-            System.out.println("成功连接到vocabulary数据库！");
+            //System.out.println("成功连接到vocabulary数据库！");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -54,7 +54,7 @@ public class VocabularyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("插入词汇数据成功！"+vocabulary);
+        //System.out.println("插入词汇数据成功！"+vocabulary);
     }
 
     public List<VocabularyData> selectAll(int count){
