@@ -5,6 +5,7 @@ import com.englishlearningapp.model.VocabularyData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -12,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -30,6 +34,9 @@ public class VocabularyTestView extends BorderPane {
     private VBox historyBox;
     private VocabularyDAO vocabularyDAO;
     private ScrollPane historyScrollPane;
+    private int parameter;
+    private Arc fanShape;
+    private BorderPane fanBorderPane;
 
     public VocabularyTestView(){
         vocabularyDAO = new VocabularyDAO();
@@ -60,7 +67,30 @@ public class VocabularyTestView extends BorderPane {
         historyScrollPane = new ScrollPane();
         historyScrollPane.setContent(historyBox);
         historyBox.setAlignment(Pos.CENTER);
-        this.setCenter(historyScrollPane);
+        //this.setRight(historyScrollPane);
+
+
+
+        fanBorderPane = new BorderPane();
+        showFanShape();
+        fanBorderPane.setCenter(fanShape);
+        //setLeft(fanShape);
+
+        SplitPane splitPane=new SplitPane(fanBorderPane, historyScrollPane);
+        splitPane.setDividerPositions(0.8);
+        this.setCenter(splitPane);
+    }
+
+    private void showFanShape(){
+        double angle = calculateAngle(parameter);
+        fanShape = new Arc(200, 200, 150, 150, 0, angle);
+        fanShape.setType(ArcType.ROUND);
+        fanShape.setFill(Color.BLUE);
+        fanBorderPane.setCenter(fanShape);
+    }
+
+    private double calculateAngle(int parameter) {
+        return (parameter / 10000.0) * 360;
     }
 
     private void openWebsite(String url) throws IOException, URISyntaxException {
@@ -73,29 +103,32 @@ public class VocabularyTestView extends BorderPane {
 
     private void showVocabulary(){
         List<VocabularyData> list=vocabularyDAO.selectAll(10);
-
+        parameter=list.get(0).getVocabulary();
         historyBox.getChildren().clear();
         for(VocabularyData vocabularyData:list){
             Label date=new Label(vocabularyData.getDate());
-            date.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+            date.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;-fx-text-alignment: left;");
             Label vocabularyNum=new Label(vocabularyData.getVocabulary()+"");
-            vocabularyNum.setStyle("-fx-font-size: 32px; -fx-font-weight: bold;");
+            vocabularyNum.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;-fx-text-alignment: left;");
             date.setAlignment(Pos.CENTER);
             vocabularyNum.setAlignment(Pos.CENTER);
             HBox hBox=new HBox(vocabularyNum,date);
-            hBox.setAlignment(Pos.CENTER);
+            hBox.setAlignment(Pos.CENTER_LEFT);
             hBox.setSpacing(10);
             historyBox.getChildren().add(hBox);
         }
     }
+
     private void addVocabulary(){
         if(isInteger(addField.getText())){
             int vocabulary=Integer.parseInt(addField.getText());
             if(vocabulary>=0){
                 LocalDateTime now=LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 VocabularyData vocabularyData=new VocabularyData(vocabulary,now.format(formatter));
                 vocabularyDAO.save(vocabularyData);
+                parameter=vocabulary;
+                showFanShape();
                 showVocabulary();
                 return;
             }
@@ -105,6 +138,7 @@ public class VocabularyTestView extends BorderPane {
         stage.setScene(scene);
         stage.show();
     }
+
     private boolean isInteger(String input) {
         try {
             int test=Integer.parseInt(input);

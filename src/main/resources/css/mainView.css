@@ -20,6 +20,37 @@
 .button:pressed {
     -fx-background-color: rgba(255, 255, 255, 0.3); /* 半透明背景，更深 */
 }
+#mainViewButton {
+    -fx-background-color: transparent;
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-radius: 10px; /* 圆角 */
+    -fx-background-radius: 10px; /* 圆角 */
+    -fx-padding: 10px; /* 内边距 */
+    -fx-min-width: 150px; /* 最小宽度 */
+    -fx-min-height: 150px; /* 最小高度 */
+    -fx-max-width: 300px; /* 最大宽度 */
+    -fx-max-height: 300px; /* 最大高度 */
+    -fx-scale-x: 1; /* 初始缩放 */
+    -fx-scale-y: 1; /* 初始缩放 */
+    -fx-transition: -fx-scale-x 0.2s, -fx-scale-y 0.2s; /* 过渡效果 */
+}
+#mainViewButton:pressed {
+    -fx-scale-x: 1.2; /* 点击时缩放 */
+    -fx-scale-y: 1.2; /* 点击时缩放 */
+}
+#mainViewButton:hover {
+    -fx-scale-x: 1.2; /* 悬停时缩放 */
+    -fx-scale-y: 1.2; /* 悬停时缩放 */
+}
+
+#mainViewButton Label {
+    -fx-text-fill: black; /* 文字颜色 */
+    -fx-font-size: 16px; /* 文字大小 */
+    -fx-font-weight: bold;
+    -fx-alignment: center; /* 文字居中 */
+}
 
 /* 美化输入文本框 */
 .text-field {
@@ -45,11 +76,11 @@
 }
 /* 设置 ScrollPane 的背景颜色 */
 .scroll-pane {
-    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
 }
 /* 设置 ScrollPane 的内容区域背景颜色 */
 .scroll-pane > .viewport {
-    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
 }
 /* 设置垂直滚动条的样式 */
 .scroll-pane > .scroll-bar:vertical {

@@ -8,9 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import lombok.SneakyThrows;
 
@@ -62,26 +60,49 @@ public class BookContentView extends BorderPane {
 
         // 主界面：书籍内容
         contentView = new WebView();
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: rgba(123,235,124,0.4)");
+        BorderPane rightRegion = new BorderPane();
+        rightRegion.setStyle("-fx-background-color: rgba(123,235,124,0.2);");
+        borderPane.setRight(rightRegion);
+        rightRegion.setOnMouseClicked(event -> {
+            int currentPageIndex = pagination.getCurrentPageIndex();
+            if (currentPageIndex < pagination.getPageCount() - 1) {
+                pagination.setCurrentPageIndex(currentPageIndex + 1); // 翻到下一页
+            }
+        });
+        BorderPane leftRegion = new BorderPane();
+        leftRegion.setStyle("-fx-background-color: rgba(123,235,124,0.2);");
+        borderPane.setLeft(leftRegion);
+        leftRegion.setOnMouseClicked(event -> {
+            int currentPageIndex = pagination.getCurrentPageIndex();
+            if (currentPageIndex > 0) {
+                pagination.setCurrentPageIndex(currentPageIndex - 1); // 翻到下一页
+            }
+        });
+        StackPane stackPane = new StackPane();
         // 加载并分页书籍内容
         loadBookContent(bookFile);
         pagination = new Pagination(pages.size());
         pagination.setPageFactory(this::createPage);
         pagination.setCurrentPageIndex(index-1);
         pageNumberField = new TextField();
-        pageNumberField.setPromptText("输入页码");
+        pageNumberField.setPromptText("当前所在页："+index);
         Button goToPageButton = getGoToPageButton();
         ScrollPane scrollPane = new ScrollPane(contentView);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-        this.setCenter(scrollPane);
+        //this.setCenter(scrollPane);
+        stackPane.getChildren().addAll(scrollPane,borderPane,rightRegion,leftRegion);
 
+        this.setCenter(scrollPane);
         // 底部界面：分页控制
         HBox bottomBox = new HBox(10, pagination, pageNumberField, goToPageButton);
         bottomBox.setAlignment(Pos.CENTER);
         this.setBottom(bottomBox);
 
 
-        //showPage(this.index);
     }
 
     private Button getGoToPageButton() {
@@ -162,6 +183,7 @@ public class BookContentView extends BorderPane {
             this.index=pageIndex;
             String highlightedPage = highlightWords(pages.get(pageIndex), collectedWords);
             contentView.getEngine().loadContent(highlightedPage);
+            pageNumberField.setPromptText("当前所在页："+(index+1));
         }
     }
 
@@ -181,7 +203,7 @@ public class BookContentView extends BorderPane {
 
             for (String word : words) {
                 if (wordsToHighlight.contains(word)) {
-                    textBuilder.append("<span style='color: green;text-decoration:underline;'>")
+                    textBuilder.append("<span style='background-color: yellow;'>")
                             .append(word)
                             .append("</span> ");
                 } else {

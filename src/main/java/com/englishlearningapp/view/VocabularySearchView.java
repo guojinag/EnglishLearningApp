@@ -8,8 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -60,7 +58,7 @@ public class VocabularySearchView extends BorderPane {
         splitPane = new SplitPane(resultScrollPane, rightPane);
         splitPane.setDividerPositions(0.66);
         // 将结果展示区域添加到 BorderPane 的中心
-        setCenter(splitPane);
+        setCenter(resultScrollPane);
 
 
     }
@@ -83,15 +81,56 @@ public class VocabularySearchView extends BorderPane {
 
         // 将搜索结果添加到结果展示区域
         for (WordData word : searchResults) {
-            Button wordButton = new Button(word.getWord());
-            wordButton.setFont(Font.font("Arial", 14));
-            wordButton.setTextFill(Color.BLACK);
-            wordButton.setPrefWidth(200);
-            wordButton.setOnAction(event -> showWordDetails(word));
-            resultBox.getChildren().add(wordButton);
+//            Button wordButton = new Button(word.getWord());
+//            wordButton.setFont(Font.font("Arial", 14));
+//            wordButton.setTextFill(Color.BLACK);
+//            wordButton.setPrefWidth(200);
+//            wordButton.setOnAction(event -> showWordDetails(word));
+
+            HBox hBox = new HBox(10);
+
+            // 创建单词拼写标签，并设置字体大小和加粗
+            Label wordLabel = new Label(word.getWord());
+            wordLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold;");
+
+            // 创建单词音标、释义和星级标签
+            Label phoneticLabel = new Label(word.getPhonetic());
+            phoneticLabel.setAlignment(Pos.BOTTOM_CENTER);
+            Label explanationLabel = new Label(word.getExplanation());
+            explanationLabel.setAlignment(Pos.BOTTOM_CENTER);
+            Label starLabel = new Label("柯林斯星级："+word.getCOBUILD_star());
+            starLabel.setAlignment(Pos.BOTTOM_CENTER);
+
+            Button collectButton = getCollectButton(word);
+
+            hBox.getChildren().addAll(
+                    wordLabel,
+                    phoneticLabel,
+                    explanationLabel,
+                    starLabel,
+                    collectButton
+            );
+            hBox.setSpacing(10);
+            resultBox.getChildren().add(hBox);
+
         }
 
         wordDAO.closeConnection();
+    }
+
+    private Button getCollectButton(WordData word) {
+        Button collectButton = new Button(word.getIsCollected() == 0 ? "收藏" : "取消收藏");
+        collectButton.setAlignment(Pos.BOTTOM_LEFT);
+        collectButton.setOnAction(event -> {
+            collectButton.setText(word.getIsCollected() == 1 ? "收藏" : "取消收藏");
+            try {
+                setCollected(word);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            word.setIsCollected(word.getIsCollected() == 1 ? 0 : 1);
+        });
+        return collectButton;
     }
 
     private void showWordDetails(WordData word) {
