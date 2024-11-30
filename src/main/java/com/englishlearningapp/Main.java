@@ -37,6 +37,9 @@ public class Main extends Application {
         vocabularySearchView = new VocabularySearchView();
         vocabularyTestView = new VocabularyTestView();
         testView = new TestView();
+        //VScene vScene=new VScene(new Label("vUI"));
+//        VStage stage = new VStage();
+//        stage.show();
         // 中部窗口及根节点
         BorderPane root = new BorderPane();
 

@@ -59,7 +59,7 @@ public class VocabularyDAO {
 
     public List<VocabularyData> selectAll(int count){
         List<VocabularyData> vocabularyList = new ArrayList<>();
-        String selectSQL = "SELECT * FROM vocabulary order by date desc";
+        String selectSQL = "SELECT * FROM vocabulary order by id desc";
 
         try (PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
             try (ResultSet rs = pstmt.executeQuery()) {

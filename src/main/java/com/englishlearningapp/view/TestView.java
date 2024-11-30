@@ -15,10 +15,12 @@ public class TestView extends BorderPane {
     public TestView() {
         //subPane = new BorderPane();
         questionSelectButton = new Button("题目测试");
+        questionSelectButton.setId("testViewButton");
         questionSelectButton.setOnAction(e -> {
             this.setCenter(new QuestionSelectView(this));
         });
         questionBankButton= new Button("查看题库");
+        questionBankButton.setId("testViewButton");
         questionBankButton.setOnAction(e -> {
             this.setCenter(new QuestionBankView(this));
         });

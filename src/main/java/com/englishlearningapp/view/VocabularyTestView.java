@@ -5,14 +5,12 @@ import com.englishlearningapp.model.VocabularyData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -36,7 +34,10 @@ public class VocabularyTestView extends BorderPane {
     private ScrollPane historyScrollPane;
     private int parameter;
     private Arc fanShape;
-    private BorderPane fanBorderPane;
+    private BorderPane fanPane;
+    private StackPane fanStackPane;
+    private Label fanLabel;
+    private VBox fanBox;
 
     public VocabularyTestView(){
         vocabularyDAO = new VocabularyDAO();
@@ -70,23 +71,32 @@ public class VocabularyTestView extends BorderPane {
         //this.setRight(historyScrollPane);
 
 
-
-        fanBorderPane = new BorderPane();
+        fanPane = new BorderPane();
         showFanShape();
-        fanBorderPane.setCenter(fanShape);
-        //setLeft(fanShape);
 
-        SplitPane splitPane=new SplitPane(fanBorderPane, historyScrollPane);
+        fanLabel=new Label(parameter+"/10000");
+        fanLabel.setStyle("-fx-font-size: 20px;-fx-font-weight: bold;-fx-color: yellow;");
+        fanLabel.setAlignment(Pos.CENTER);
+
+        fanStackPane = new StackPane(fanPane,fanLabel);
+//        fanBox=new VBox(fanShape,fanLabel);
+//        fanBox.setAlignment(Pos.CENTER);
+//        fanPane.setCenter(fanBox);
+        SplitPane splitPane=new SplitPane(fanStackPane, historyScrollPane);
         splitPane.setDividerPositions(0.8);
         this.setCenter(splitPane);
     }
 
     private void showFanShape(){
         double angle = calculateAngle(parameter);
-        fanShape = new Arc(200, 200, 150, 150, 0, angle);
-        fanShape.setType(ArcType.ROUND);
-        fanShape.setFill(Color.BLUE);
-        fanBorderPane.setCenter(fanShape);
+        fanShape = new Arc(0, 0, 150, 150, 0, angle);
+        //System.out.println(fanPane.getWidth()+" "+fanPane.getHeight());
+        fanShape.setType(ArcType.OPEN);
+        //fanShape.setFill(Color.BLUE);
+        fanShape.setFill(Color.TRANSPARENT);
+        fanShape.setStroke(Color.rgb(250,150,37));
+        fanShape.setStrokeWidth(20);
+        fanPane.setCenter(fanShape);
     }
 
     private double calculateAngle(int parameter) {
@@ -103,7 +113,12 @@ public class VocabularyTestView extends BorderPane {
 
     private void showVocabulary(){
         List<VocabularyData> list=vocabularyDAO.selectAll(10);
-        parameter=list.get(0).getVocabulary();
+        if(list.size()!=0){
+            parameter=list.get(list.size()-1).getVocabulary();
+        }else{
+            parameter=0;
+        }
+
         historyBox.getChildren().clear();
         for(VocabularyData vocabularyData:list){
             Label date=new Label(vocabularyData.getDate());
@@ -124,7 +139,7 @@ public class VocabularyTestView extends BorderPane {
             int vocabulary=Integer.parseInt(addField.getText());
             if(vocabulary>=0){
                 LocalDateTime now=LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd ");
                 VocabularyData vocabularyData=new VocabularyData(vocabulary,now.format(formatter));
                 vocabularyDAO.save(vocabularyData);
                 parameter=vocabulary;

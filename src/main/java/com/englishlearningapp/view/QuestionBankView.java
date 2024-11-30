@@ -84,11 +84,14 @@ public class QuestionBankView extends BorderPane {
 
     private void showQuestionDetails(QuestionData q) {
 
-        Label typeLabel = new Label("题目类型："+q.getType());
-        Label aiModuleLabel = new Label("ai模型："+q.getAiModule());
-        Label relatedBookLabel = new Label("关联书籍："+q.getRelatedBook());
+        Label typeLabel = new Label(q.getType());
+        typeLabel.setStyle("-fx-font-weight: bold;");
+        Label aiModuleLabel = new Label(q.getAiModule());
+        aiModuleLabel.setStyle("-fx-font-weight: bold;");
+        Label relatedBookLabel = new Label(q.getRelatedBook());
+        relatedBookLabel.setStyle("-fx-font-weight: bold;");
         HBox typeBox=new HBox(typeLabel,aiModuleLabel,relatedBookLabel);
-        typeBox.setSpacing(30);
+        typeBox.setSpacing(40);
         typeBox.setPadding(new Insets(10,10,10,10));
 
 
@@ -103,6 +106,7 @@ public class QuestionBankView extends BorderPane {
         answerButton.setAlignment(Pos.CENTER_LEFT);
         StackPane stackPane=new StackPane(answerLabel,answerButton);
         TextFlow questionLabel = new TextFlow(new Text(q.getQuestion()));
+        questionLabel.setStyle("-fx-font-size: 14px;");
         detailBox = new VBox(typeBox,questionLabel,stackPane);
 
         Button collectButton=new Button(q.getIsCollected()==0?"收藏":"取消收藏");
