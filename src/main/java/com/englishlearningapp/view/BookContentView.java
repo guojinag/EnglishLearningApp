@@ -38,7 +38,7 @@ public class BookContentView extends BorderPane {
     @SneakyThrows
     public BookContentView(BookReaderView bookReaderView, String bookFile)  {
         this.bookReaderView = bookReaderView;
-        this.bookFile = bookFile.replace(".txt","");
+        this.bookFile = bookFile;
         //载入收藏单词
         wordDAO = new WordDAO();
         List<WordData> list = wordDAO.selectWordCollect();
@@ -52,7 +52,7 @@ public class BookContentView extends BorderPane {
         backButton.setOnAction(event -> this.bookReaderView.showBookReaderView());
         Button preserveIndexButton =new Button("保存书签");
         preserveIndexButton.setOnAction(event -> {
-            bookDAO.updateBookIndex(this.bookFile,this.index);
+            bookDAO.updateBookIndex(this.bookFile,this.index+1);
         });
         HBox topBox = new HBox(backButton, preserveIndexButton);
         this.setTop(topBox);
@@ -124,7 +124,7 @@ public class BookContentView extends BorderPane {
     }
 
     private void loadBookContent(String bookFile) {
-        InputStream inputStream = getClass().getResourceAsStream("/books/"+bookFile);
+        InputStream inputStream = getClass().getResourceAsStream("/books/"+bookFile+".txt");
         if (inputStream == null) {
             contentView.getEngine().loadContent("无法加载书籍内容");
             return;

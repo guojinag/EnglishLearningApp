@@ -2,8 +2,6 @@ package com.englishlearningapp.dao;
 
 import com.englishlearningapp.model.VocabularyData;
 
-import java.net.URL;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +33,29 @@ public class VocabularyDAO {
 //            e.printStackTrace();
 //        }
 
+//        try {
+//            // 使用 ClassLoader 获取资源文件的路径
+//            URL dbUrl = getClass().getResource("/questions/SmartReadAI.db");
+//            if (dbUrl == null) {
+//                throw new IllegalStateException("Database file not found");
+//            }
+//            String dbPath = Paths.get(dbUrl.toURI()).toString();
+//            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+//            int i=0;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         try {
-            // 使用 ClassLoader 获取资源文件的路径
-            URL dbUrl = getClass().getResource("/SmartReadAI.db");
-            if (dbUrl == null) {
-                throw new IllegalStateException("Database file not found");
-            }
-            String dbPath = Paths.get(dbUrl.toURI()).toString();
-            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-            int i=0;
-        } catch (Exception e) {
+            Class.forName("org.sqlite.JDBC");
+
+            // 获取数据库文件的输入流
+            String url = "jdbc:sqlite::resource:" + getClass().getResource("/SmartReadAI.db").toString();
+
+            // 连接到数据库
+            connection = DriverManager.getConnection(url);
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to initialize database connection", e);
         }
     }
 

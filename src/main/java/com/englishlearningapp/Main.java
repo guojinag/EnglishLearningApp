@@ -12,13 +12,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -37,9 +38,6 @@ public class Main extends Application {
         vocabularySearchView = new VocabularySearchView();
         vocabularyTestView = new VocabularyTestView();
         testView = new TestView();
-        //VScene vScene=new VScene(new Label("vUI"));
-//        VStage stage = new VStage();
-//        stage.show();
         // 中部窗口及根节点
         BorderPane root = new BorderPane();
 
@@ -60,12 +58,14 @@ public class Main extends Application {
         buttonBox.setVisible(false);
 
         //好句label
-        String pa= getClass().getResource("/sentence.txt").toString();
-        pa=pa.substring(5,pa.length());
-        String sentence=getRandomLine(pa);
-        Label mainlabel = new Label(sentence);
+//        String pa= getClass().getResource("/questions/sentence.txt").toString();
+//        pa=pa.substring(5,pa.length());
+
+        String sentence = getRandomLineFromResource("/sentence.txt");
+        //String sentence=getRandomLine(pa);
+        TextFlow mainlabel = new TextFlow(new Text(sentence));
         mainlabel.setId("sentence");
-        mainlabel.setAlignment(Pos.CENTER);
+        //mainlabel.setAlignment(Pos.CENTER);
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -148,6 +148,29 @@ public class Main extends Application {
                 lines.add(line);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (lines.isEmpty()) {
+            return null;
+        }
+
+        int randomIndex = random.nextInt(lines.size());
+        return lines.get(randomIndex);
+    }
+    public String getRandomLineFromResource(String filePath) {
+        List<String> lines = new ArrayList<>();
+        Random random = new Random();
+
+        try (InputStream inputStream = getClass().getResourceAsStream(filePath);
+             InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(streamReader)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

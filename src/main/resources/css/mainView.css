@@ -48,9 +48,10 @@
 
 #mainViewButton Label {
     -fx-text-fill: black; /* 文字颜色 */
-    -fx-font-size: 16px; /* 文字大小 */
+    -fx-font-size: 24px; /* 文字大小 */
     -fx-font-weight: bold;
     -fx-alignment: center; /* 文字居中 */
+    -fx-translate-y: 60px;
 }
 
 #testViewButton {

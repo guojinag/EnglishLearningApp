@@ -1,5 +1,7 @@
 package com.englishlearningapp.view;
 
+import com.englishlearningapp.dao.BookDAO;
+import com.englishlearningapp.model.BookData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,6 +26,7 @@ public class BookReaderView extends BorderPane {
 
     private ScrollPane mainScrollPane;
     private GridPane bookGrid;
+    private BookDAO bookDAO;
 
     public BookReaderView() {
         // 初始化书籍网格
@@ -31,6 +34,7 @@ public class BookReaderView extends BorderPane {
         bookGrid.setPadding(new Insets(10));
         bookGrid.setHgap(10);
         bookGrid.setVgap(10);
+        bookDAO=new BookDAO();
 
         for (int i = 0; i < 3; i++) {
             ColumnConstraints columnConstraints = new ColumnConstraints();
@@ -38,20 +42,21 @@ public class BookReaderView extends BorderPane {
             bookGrid.getColumnConstraints().add(columnConstraints);
         }
         // 读取book,创建网格内容
-        List<String> bookFiles = getBookFiles();
+        //List<String> bookFiles = getBookFiles();
+        List<BookData> list=bookDAO.selectAllBooks();
         int row = 0;
         int col = 0;
-        for (String bookFile : bookFiles) {
-            String fileName = getFileName(bookFile);
-            String imageFileName = fileName.replace(".txt", ".png");
+        for (BookData bookFile : list) {
+            String fileName = bookFile.getBook();
+            //String imageFileName = fileName.replace(".txt", ".png");
 
-            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/book/" + imageFileName)));
+            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/book/" + fileName+".png")));
             imageView.setFitWidth(62);
             imageView.setFitHeight(100);
 
-            Button bookButton = new Button(fileName.replace(".txt", ""));
+            Button bookButton = new Button(fileName);
             bookButton.setOnAction(event -> {
-                showBookContentView(bookFile);
+                showBookContentView(bookFile.getBook());
             });
 
             VBox bookItem = new VBox(10, imageView, bookButton);
@@ -84,6 +89,7 @@ public class BookReaderView extends BorderPane {
                 .filter(line -> line.endsWith(".txt"))
                 .collect(Collectors.toList());
     }
+
 
     private String getFileName(String filePath) {
         // 从文件路径中提取文件名

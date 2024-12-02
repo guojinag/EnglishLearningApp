@@ -9,21 +9,33 @@ import java.util.List;
 public class QuestionDAO {
     private Connection connection = null;
     public QuestionDAO(){
+//        try {
+//            // 加载SQLite驱动程序
+//            Class.forName("org.sqlite.JDBC");
+//            // 创建数据库连接
+//            String DBPath= String.valueOf(getClass().getResource("/questions/SmartReadAI.db"));
+//            DBPath=DBPath.substring(5,DBPath.length());
+//            //System.out.println("jdbc:sqlite:"+DBPath);
+//            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
+//            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
+//            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
+//            //System.out.println("成功连接到question表！");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         try {
-            // 加载SQLite驱动程序
             Class.forName("org.sqlite.JDBC");
-            // 创建数据库连接
-            String DBPath= String.valueOf(getClass().getResource("/SmartReadAI.db"));
-            DBPath=DBPath.substring(5,DBPath.length());
-            //System.out.println("jdbc:sqlite:"+DBPath);
-            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
-            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
-            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
-            //System.out.println("成功连接到question表！");
-        } catch (ClassNotFoundException e) {
+
+            // 获取数据库文件的输入流
+            String url = "jdbc:sqlite::resource:" + getClass().getResource("/SmartReadAI.db").toString();
+
+            // 连接到数据库
+            connection = DriverManager.getConnection(url);
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to initialize database connection", e);
         }
     }
     public void closeConnection() {
