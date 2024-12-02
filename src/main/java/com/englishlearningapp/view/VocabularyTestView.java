@@ -37,7 +37,7 @@ public class VocabularyTestView extends BorderPane {
     private BorderPane fanPane;
     private StackPane fanStackPane;
     private Label fanLabel;
-    private VBox fanBox;
+    private BorderPane fanLabelPane;
 
     public VocabularyTestView(){
         vocabularyDAO = new VocabularyDAO();
@@ -72,13 +72,15 @@ public class VocabularyTestView extends BorderPane {
 
 
         fanPane = new BorderPane();
+        fanLabelPane = new BorderPane();
         showFanShape();
 
         fanLabel=new Label(parameter+"/10000");
         fanLabel.setStyle("-fx-font-size: 20px;-fx-font-weight: bold;-fx-color: yellow;");
         fanLabel.setAlignment(Pos.CENTER);
+        fanLabelPane.setCenter(fanLabel);
 
-        fanStackPane = new StackPane(fanPane,fanLabel);
+        fanStackPane = new StackPane(fanPane,fanLabelPane);
 //        fanBox=new VBox(fanShape,fanLabel);
 //        fanBox.setAlignment(Pos.CENTER);
 //        fanPane.setCenter(fanBox);
@@ -97,6 +99,11 @@ public class VocabularyTestView extends BorderPane {
         fanShape.setStroke(Color.rgb(250,150,37));
         fanShape.setStrokeWidth(20);
         fanPane.setCenter(fanShape);
+        fanLabel=new Label(parameter+"/10000");
+        fanLabel.setStyle("-fx-font-size: 20px;-fx-font-weight: bold;-fx-color: yellow;");
+        fanLabel.setAlignment(Pos.CENTER);
+        fanLabelPane.setCenter(fanLabel);
+
     }
 
     private double calculateAngle(int parameter) {
@@ -114,7 +121,7 @@ public class VocabularyTestView extends BorderPane {
     private void showVocabulary(){
         List<VocabularyData> list=vocabularyDAO.selectAll(10);
         if(list.size()!=0){
-            parameter=list.get(list.size()-1).getVocabulary();
+            parameter=list.get(0).getVocabulary();
         }else{
             parameter=0;
         }

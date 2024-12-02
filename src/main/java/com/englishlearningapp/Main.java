@@ -133,7 +133,7 @@ public class Main extends Application {
         //设置窗口
         primaryStage.setTitle("Smart Read AI");
         primaryStage.initStyle(StageStyle.UNIFIED);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/sky.png/")));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/sky.png")));
         primaryStage.setScene(scene);
         primaryStage.show();
     }

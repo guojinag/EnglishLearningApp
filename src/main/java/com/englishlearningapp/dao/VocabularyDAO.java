@@ -2,6 +2,8 @@ package com.englishlearningapp.dao;
 
 import com.englishlearningapp.model.VocabularyData;
 
+import java.net.URL;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +14,37 @@ public class VocabularyDAO {
 
 
     public VocabularyDAO(){
+//        try {
+//            // 加载SQLite驱动程序
+//            Class.forName("org.sqlite.JDBC");
+//
+//            // 创建数据库连接
+//            String DBPath= String.valueOf(getClass().getResource("/SmartReadAI.db"));
+//            DBPath=DBPath.substring(5,DBPath.length());
+//            //System.out.println("jdbc:sqlite:"+DBPath);
+//            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
+//            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
+//            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
+//
+//            //statement = connection.createStatement();
+//
+//            //System.out.println("成功连接到vocabulary数据库！");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
         try {
-            // 加载SQLite驱动程序
-            Class.forName("org.sqlite.JDBC");
-
-            // 创建数据库连接
-            String DBPath= String.valueOf(getClass().getResource("/SmartReadAI.db"));
-            DBPath=DBPath.substring(5,DBPath.length());
-            //System.out.println("jdbc:sqlite:"+DBPath);
-            connection = DriverManager.getConnection("jdbc:sqlite:"+DBPath);
-            //connection = DriverManager.getConnection("jdbc:sqlite:"+getClass().getResource("SmartReadAI.db"));
-            //connection = DriverManager.getConnection("jdbc:sqlite:E:\\javaProject\\English-Helper\\src\\main\\resources\\SmartReadAI.db");
-
-            //statement = connection.createStatement();
-
-            //System.out.println("成功连接到vocabulary数据库！");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+            // 使用 ClassLoader 获取资源文件的路径
+            URL dbUrl = getClass().getResource("/SmartReadAI.db");
+            if (dbUrl == null) {
+                throw new IllegalStateException("Database file not found");
+            }
+            String dbPath = Paths.get(dbUrl.toURI()).toString();
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+            int i=0;
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

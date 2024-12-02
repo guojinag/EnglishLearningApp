@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Main-Class: com.englishlearningapp.Main
+Class-Path: jfxtras-agenda-8.0-r5.jar easyexcel-support-3.2.1.jar common
+ s-codec-1.13.jar jfxtras-controls-8.0-r5.jar commons-collections4-4.4.j
+ ar commons-compress-1.19.jar jfxtras-labs-8.0-r5.jar slf4j-api-1.7.32.j
+ ar poi-4.1.2.jar SparseBitSet-1.2.jar ehcache-3.9.9.jar lombok-1.18.34.
+ jar commons-math3-3.6.1.jar sqlite-jdbc-3.34.0.jar easyexcel-3.2.1.jar 
+ xmlbeans-3.1.0.jar poi-ooxml-schemas-4.1.2.jar jfxtras-common-8.0-r5.ja
+ r curvesapi-1.06.jar poi-ooxml-4.1.2.jar easyexcel-core-3.2.1.jar commo
+ ns-csv-1.8.jar jfxtras-fxml-8.0-r5.jar
+
